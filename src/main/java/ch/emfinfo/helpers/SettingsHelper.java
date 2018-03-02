@@ -249,6 +249,7 @@ public class SettingsHelper {
    *
    * @param pref une préférence de type String ou Enum
    * @param value une valeur de type "float" à mémoriser
+   * @param nbOfDecs nombre de decimales à mémoriser
    */
   public static void setFloat(Object pref, float value, int nbOfDecs) {
     String fmt = (nbOfDecs > 0) ? "0." + fillString(nbOfDecs, '0') : "0";
@@ -285,6 +286,7 @@ public class SettingsHelper {
    *
    * @param pref une préférence de type String ou Enum
    * @param value une valeur de type "double" à mémoriser
+   * @param nbOfDecs nombre de decimales à mémoriser
    */
   public static void setDouble(Object pref, double value, int nbOfDecs) {
     String fmt = (nbOfDecs > 0) ? "0." + fillString(nbOfDecs, '0') : "0";
