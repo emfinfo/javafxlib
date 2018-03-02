@@ -348,10 +348,10 @@ public class SettingsHelper {
    * @return un objet Rectangle;
    */
   public static Rectangle2D getRectangle(String prefId) {
-    double x = SettingsHelper.getDouble(prefId + "_X", 0d);
-    double y = SettingsHelper.getDouble(prefId + "_Y", 0d);
-    double w = SettingsHelper.getDouble(prefId + "_WIDTH", 0d);
-    double h = SettingsHelper.getDouble(prefId + "_HEIGHT", 0d);
+    double x = getDouble(prefId + "_X", 0d);
+    double y = getDouble(prefId + "_Y", 0d);
+    double w = getDouble(prefId + "_WIDTH", 0d);
+    double h = getDouble(prefId + "_HEIGHT", 0d);
     return new Rectangle2D(x, y, w, h);
   }
 

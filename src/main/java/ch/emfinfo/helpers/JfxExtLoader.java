@@ -26,9 +26,9 @@ public class JfxExtLoader<T> {
    */
   public JfxExtLoader (String viewName) {
     this.viewName = viewName;
-    view = null;
-    ctrl = null;
-    extRb = null;
+    this.view = null;
+    this.ctrl = null;
+    this.extRb = null;
     loadFxml();
   }
 
@@ -50,6 +50,15 @@ public class JfxExtLoader<T> {
     } catch (IOException ex) {
       exMessage = ex.getLocalizedMessage();
     }
+  }
+
+  /**
+   * Retourne le nom de la vue.
+   *
+   * @return le nom de la vue
+   */
+  public String getViewName() {
+    return viewName;
   }
 
   /**
