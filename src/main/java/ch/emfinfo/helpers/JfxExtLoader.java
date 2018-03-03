@@ -1,6 +1,5 @@
 package ch.emfinfo.helpers;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -30,7 +29,7 @@ public class JfxExtLoader<T> {
   private String viewName;
   private Parent view;
   private T ctrl;
-  private JfxExtResourceBundle extRb;
+  private JfxExtResourceBundle extRB;
 
   /**
    * Constructeur,
@@ -40,7 +39,7 @@ public class JfxExtLoader<T> {
     this.viewName = viewName;
     this.view = null;
     this.ctrl = null;
-    this.extRb = null;
+    this.extRB = null;
     loadFxml();
   }
 
@@ -56,7 +55,7 @@ public class JfxExtLoader<T> {
       loader = new FXMLLoader(getClass().getResource(fxmlFullName), rb);
       view = loader.load();
       ctrl = loader.getController();
-      extRb = new JfxExtResourceBundle(rb);
+      extRB = new JfxExtResourceBundle(rb);
       exMessage = "";
 //    } catch (MissingResourceException | IllegalStateException | IOException ex) {
     } catch (IOException ex) {
@@ -106,7 +105,7 @@ public class JfxExtLoader<T> {
    * @return une référence sur l'objet qui gère les resources actuelles
    */
   public JfxExtResourceBundle getExtResourceBundle() {
-    return extRb;
+    return extRB;
   }
 
   /**
@@ -115,7 +114,7 @@ public class JfxExtLoader<T> {
    * @param rb une référence sur un paquet de resources
    */
   public void setExtResourceBundle(JfxExtResourceBundle rb) {
-    this.extRb = rb;
+    this.extRB = rb;
   }
 
   public String getErrorTitle() {
@@ -166,12 +165,24 @@ public class JfxExtLoader<T> {
    * "login" et "logo" pour les attribuer à la barre de titre.
    *
    * @param owner le propriétaire de la sous-vue.
+   * @param center true pour centrer la fenêtre enfant par rapport à la fenêtre parente
    * @param myFunc une fonction à utiliser lorsque l'on quitte la fenêtre
    */
-  public void displayView(Window owner, Callable<Void> myFunc) {
+  public void displayView(Window owner, boolean center, Callable<Void> myFunc) {
 
-    // nom transformé en majuscules
+    // nom transformé en majuscules avec un "_" entre chaque mot
     String uViewName = getViewName().toUpperCase();
+    String[] r = getViewName().split("(?=\\p{Upper})");
+    if (r.length > 0) {
+      uViewName = "";
+      for (int i = 0; i < r.length; i++) {
+        if (i > 0) {
+          uViewName += "_";
+        }
+        uViewName += r[i].toUpperCase();
+      }
+    }
+//    System.out.println("uViewName: "+uViewName);
 
     // teste si la vue a été chargée
     if (hasError()) {
@@ -192,24 +203,26 @@ public class JfxExtLoader<T> {
       childStage.setMinHeight(SettingsHelper.getDouble(uViewName+"_MIN_HEIGHT"));
 
       // choisir un titre pour la fenêtre
-      childStage.setTitle(extRb.getTextProperty("title"));
+      childStage.setTitle(extRB.getTextProperty("title"));
 
       // rajouter une icône dans la barre de titre
-      String logoPath = extRb.getTextProperty("logo").trim();
-
-      if (!logoPath.isEmpty()) {
-        File file = new File(logoPath);
-        if (file.exists()) {
-          childStage.getIcons().add(new Image(extRb.getTextProperty("logo")));
-        }
+      String logoPath = extRB.getTextProperty("logo").trim();
+      boolean logoExist = getClass().getResource(logoPath) != null;
+      if (logoExist) {
+        childStage.getIcons().add(new Image(logoPath));
       }
 
       // repositionne et redimentionne la fenêtre si les données ont été mémorisées
       Rectangle2D mainRect = new Rectangle2D(owner.getX(), owner.getY(), owner.getWidth(), owner.getHeight());
       Rectangle2D childRect = SettingsHelper.getRectangle(uViewName);
       if (childRect.getWidth() > 0d && childRect.getHeight() > 0d) {
-        childStage.setX(mainRect.getMinX() + mainRect.getWidth() / 2 - childRect.getWidth() / 2);
-        childStage.setY(mainRect.getMinY() + mainRect.getHeight() / 2 - childRect.getHeight() / 2);
+        if (center) {
+          childStage.setX(mainRect.getMinX() + mainRect.getWidth() / 2 - childRect.getWidth() / 2);
+          childStage.setY(mainRect.getMinY() + mainRect.getHeight() / 2 - childRect.getHeight() / 2);
+        } else {
+          childStage.setX(childRect.getMinX());
+          childStage.setY(childRect.getMinY());
+        }
         childStage.setWidth(childRect.getWidth());
         childStage.setHeight(childRect.getHeight());
       }
