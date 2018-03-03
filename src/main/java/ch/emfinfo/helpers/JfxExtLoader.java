@@ -1,10 +1,22 @@
 package ch.emfinfo.helpers;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.concurrent.Callable;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.Window;
 
 /**
  * Chargement d'une vue (fichier fxml), de son contrôleur et du fichier de resources lié.
@@ -118,6 +130,8 @@ public class JfxExtLoader<T> {
       case "it":
         errTitle = "Errore";
         break;
+      default :
+        errTitle = "Error";
     }
     return errTitle;
   }
@@ -139,8 +153,91 @@ public class JfxExtLoader<T> {
       case "it":
         errMsg = "Problemi con la vista di carico " + viewName + " !";
         break;
+      default :
+        errMsg = "Problem when loading the view " + viewName + " !";
     }
     return errMsg + "\n" + exMessage;
+  }
+
+
+  /**
+   * Permet d'afficher une sous-vue déjà chargée vers un stage (fenêtre) "enfant". Le premier conteneur
+   * doit être un BorderPane. La méthode recherche dans le paquet de resources les clés
+   * "login" et "logo" pour les attribuer à la barre de titre.
+   *
+   * @param owner le propriétaire de la sous-vue.
+   * @param myFunc une fonction à utiliser lorsque l'on quitte la fenêtre
+   */
+  public void displayView(Window owner, Callable<Void> myFunc) {
+
+    // nom transformé en majuscules
+    String uViewName = getViewName().toUpperCase();
+
+    // teste si la vue a été chargée
+    if (hasError()) {
+      JfxPopup.displayError(owner, getErrorTitle(), null, getErrorMessage());
+    } else {
+      BorderPane childRootpane = (BorderPane) getView();
+      Scene newScene = new Scene(childRootpane);
+
+      // définir une nouvelle fenêtre enfant de la première
+      Stage childStage = new Stage();
+      childStage.initOwner(owner);
+      childStage.initStyle(StageStyle.UTILITY);
+      childStage.initModality(Modality.WINDOW_MODAL);
+      childStage.setScene(newScene);
+
+      // appliquer les dimensions minimales
+      childStage.setMinWidth(SettingsHelper.getDouble(uViewName+"_MIN_WIDTH"));
+      childStage.setMinHeight(SettingsHelper.getDouble(uViewName+"_MIN_HEIGHT"));
+
+      // choisir un titre pour la fenêtre
+      childStage.setTitle(extRb.getTextProperty("title"));
+
+      // rajouter une icône dans la barre de titre
+      String logoPath = extRb.getTextProperty("logo").trim();
+
+      if (!logoPath.isEmpty()) {
+        File file = new File(logoPath);
+        if (file.exists()) {
+          childStage.getIcons().add(new Image(extRb.getTextProperty("logo")));
+        }
+      }
+
+      // repositionne et redimentionne la fenêtre si les données ont été mémorisées
+      Rectangle2D mainRect = new Rectangle2D(owner.getX(), owner.getY(), owner.getWidth(), owner.getHeight());
+      Rectangle2D childRect = SettingsHelper.getRectangle(uViewName);
+      if (childRect.getWidth() > 0d && childRect.getHeight() > 0d) {
+        childStage.setX(mainRect.getMinX() + mainRect.getWidth() / 2 - childRect.getWidth() / 2);
+        childStage.setY(mainRect.getMinY() + mainRect.getHeight() / 2 - childRect.getHeight() / 2);
+        childStage.setWidth(childRect.getWidth());
+        childStage.setHeight(childRect.getHeight());
+      }
+
+      // ajouter un écouteur pour contrôler la sortie
+      childStage.setOnCloseRequest(e -> {
+        e.consume();
+        try {
+          myFunc.call();
+        } catch (Exception ex) {
+        }
+      });
+
+      // ajouter un autre écouteur pour une sortie avec la touche ESC
+      childStage.addEventHandler(KeyEvent.KEY_PRESSED, (KeyEvent e) -> {
+        if (e.getCode() == KeyCode.ESCAPE) {
+          e.consume();
+          try {
+            myFunc.call();
+          } catch (Exception ex) {
+          }
+        }
+      });
+
+      // afficher cette nouvelle vue "enfant"
+      childStage.show();
+    }
+
   }
 
 }
