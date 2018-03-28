@@ -138,7 +138,7 @@ public class JfxMainScene extends Scene {
       this.setFill(pattern);
 
       // correction de la largeur de la fenêtre
-      stage.setWidth(stage.getHeight() * imageRatio);
+      // stage.setWidth(stage.getHeight() * imageRatio);
 
     }
 
