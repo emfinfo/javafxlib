@@ -208,7 +208,7 @@ public class JfxMainScene extends Scene {
    * @param rb un objet JfxExtResourceBundle
    */
   public void setExtResourceBundle(JfxExtResourceBundle rb) {
-    loader.setExtResourceBundle(rb);;
+    loader.setExtResourceBundle(rb);
   }
 
   /**
