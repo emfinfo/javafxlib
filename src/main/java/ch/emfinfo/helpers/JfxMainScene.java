@@ -325,7 +325,7 @@ public class JfxMainScene extends Scene {
           Timer ti2 = new Timer();
           ti2.schedule(new UnlockTask(), 500);
         }
-      }, 100);
+      }, 500);
     }
 
     @Override
