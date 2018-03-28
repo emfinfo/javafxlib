@@ -21,7 +21,7 @@ import javafx.stage.Window;
  * Chargement d'une vue (fichier fxml), de son contrôleur et du fichier de resources lié.
  *
  * @author jcstritt
- * @param <T> le type le contrôleur
+ * @param <T> le type du contrôleur
  * @see <a href="http://xebia.developpez.com/tutoriels/java/concepts-javafx-illustration-exemple/">Tutoriel</a>
  */
 public class JfxExtLoader<T> {
@@ -32,7 +32,8 @@ public class JfxExtLoader<T> {
   private JfxExtResourceBundle extRB;
 
   /**
-   * Constructeur,
+   * Constructeur.
+   *
    * @param viewName le nom de la vue (sans l'extension .fxml ou autre)
    */
   public JfxExtLoader (String viewName) {
@@ -162,7 +163,7 @@ public class JfxExtLoader<T> {
   /**
    * Permet d'afficher une sous-vue déjà chargée vers un stage (fenêtre) "enfant". Le premier conteneur
    * doit être un BorderPane. La méthode recherche dans le paquet de resources les clés
-   * "login" et "logo" pour les attribuer à la barre de titre.
+   * "title" et "logo" pour les attribuer à la barre de titre.
    *
    * @param owner le propriétaire de la sous-vue.
    * @param center true pour centrer la fenêtre enfant par rapport à la fenêtre parente
