@@ -116,7 +116,7 @@
     </plugins>
   </reporting>
 
-  <url>https://github.com/emfinfo/basiclib</url>
+  <url>https://github.com/emfinfo/javafxlib</url>
   <developers>
     <developer>
       <id>STT</id>
