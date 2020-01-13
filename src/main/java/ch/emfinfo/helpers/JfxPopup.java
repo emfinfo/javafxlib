@@ -10,6 +10,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.Region;
 import javafx.stage.Window;
 
 /**
@@ -31,16 +32,19 @@ public class JfxPopup {
    * @param msg normalement le message principal
    */
   private static void preparePopup(Dialog<?> dlg, Window owner, String title, String header, String msg) {
+    String RES_PATH = "/resources/css/MyDialogs.css";
     dlg.initOwner(owner);
-    dlg.setTitle(title);
+    dlg.setTitle("- " + title);
     dlg.setHeaderText(header);
     dlg.setContentText(msg);
-    URL url = JfxPopup.class.getResource("/resources/css/MyDialogs.css");
+//    URL url = dlg.getClass().getClassLoader().getResource(RES_PATH);
+    URL url = JfxPopup.class.getResource(RES_PATH);
     if (url != null) {
       DialogPane pane = dlg.getDialogPane();
-      pane.getStylesheets().add(JfxPopup.class.getResource("/resources/css/MyDialogs.css").toExternalForm());
+      pane.getStylesheets().add(url.toExternalForm());
       pane.getStyleClass().add("myDialog");
     }
+    dlg.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
   }
 
   /**

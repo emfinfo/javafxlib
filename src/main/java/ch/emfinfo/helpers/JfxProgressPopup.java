@@ -52,7 +52,7 @@ public class JfxProgressPopup extends Stage {
     layout.getChildren().addAll(progressbar, lblCount);
 
     // si css trouvé
-    URL url = JfxPopup.class.getResource("/resources/css/ProgressBar.css");
+    URL url = getClass().getClassLoader().getResource("resources/css/ProgressBar.css");
     if (url != null) {
       layout.getStylesheets().add(url.toExternalForm());
       layout.getStyleClass().add("background");

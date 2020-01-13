@@ -5,7 +5,7 @@
   <!-- project information -->
   <groupId>ch.emf.info</groupId>
   <artifactId>javafxlib</artifactId>
-  <version>1.0.1</version>
+  <version>8.0.1</version>
   <packaging>jar</packaging>
 
   <!-- more project information -->

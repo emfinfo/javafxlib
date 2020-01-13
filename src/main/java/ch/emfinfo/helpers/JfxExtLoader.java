@@ -1,7 +1,9 @@
 package ch.emfinfo.helpers;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 import javafx.fxml.FXMLLoader;
@@ -48,18 +50,23 @@ public class JfxExtLoader<T> {
    * Charge le fichier FXML avec son contrôleur.
    */
   private void loadFxml() {
-    FXMLLoader loader;
-    String fxmlFullName = "/app/ihm/" + viewName + ".fxml";
+    String lang = Locale.getDefault().getLanguage();
+    String fxmlFullName = "app/ihm/" + viewName + ".fxml";
+    String rbName = "resources/bundles/" + viewName + "_" + lang;
     try {
-      String lang = Locale.getDefault().getLanguage();
-      ResourceBundle rb = ResourceBundle.getBundle("resources/bundles/" + viewName + "_" + lang);
-      loader = new FXMLLoader(getClass().getResource(fxmlFullName), rb);
+      ResourceBundle rb = ResourceBundle.getBundle(rbName);
+
+      // charge la vue et son controller
+      URL fxmlURL = getClass().getClassLoader().getResource(fxmlFullName);
+      FXMLLoader loader = new FXMLLoader(fxmlURL, rb);
       view = loader.load();
       ctrl = loader.getController();
+      
+      // charge et mémorise les resources textes actuelles
       extRB = new JfxExtResourceBundle(rb);
       exMessage = "";
-//    } catch (MissingResourceException | IllegalStateException | IOException ex) {
-    } catch (IOException ex) {
+    } catch (MissingResourceException | IllegalStateException | IOException ex) {
+      ex.printStackTrace();
       exMessage = ex.getLocalizedMessage();
     }
   }
@@ -119,7 +126,7 @@ public class JfxExtLoader<T> {
   }
 
   public String getErrorTitle() {
-    String errTitle = "Error";
+    String errTitle;
     switch (Locale.getDefault().getLanguage()) {
       case "fr":
         errTitle = "Erreur";
@@ -142,7 +149,7 @@ public class JfxExtLoader<T> {
    * @return le message d'erreur de chargement
    */
   public String getErrorMessage() {
-    String errMsg = "Laoding error with file";
+    String errMsg = "";
     switch (Locale.getDefault().getLanguage()) {
       case "fr":
         errMsg = "Problème avec le chargement de la vue " + viewName + " !";
@@ -195,7 +202,7 @@ public class JfxExtLoader<T> {
       // définir une nouvelle fenêtre enfant de la première
       Stage childStage = new Stage();
       childStage.initOwner(owner);
-      childStage.initStyle(StageStyle.UTILITY);
+      childStage.initStyle(StageStyle.DECORATED);
       childStage.initModality(Modality.WINDOW_MODAL);
       childStage.setScene(newScene);
 
@@ -204,12 +211,12 @@ public class JfxExtLoader<T> {
       childStage.setMinHeight(SettingsHelper.getDouble(uViewName+"_MIN_HEIGHT"));
 
       // choisir un titre pour la fenêtre
-      childStage.setTitle(extRB.getTextProperty("title"));
+      childStage.setTitle("- " + extRB.getTextProperty("title"));
 
       // rajouter une icône dans la barre de titre
       String logoPath = extRB.getTextProperty("logo").trim();
-      boolean logoExist = getClass().getResource(logoPath) != null;
-      if (logoExist) {
+      URL url = getClass().getClassLoader().getResource(logoPath);
+      if (url != null) {
         childStage.getIcons().add(new Image(logoPath));
       }
 
