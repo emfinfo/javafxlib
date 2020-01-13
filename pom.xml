@@ -8,6 +8,17 @@
   <version>8.0.1</version>
   <packaging>jar</packaging>
 
+  <!-- more project information -->
+  <name>JavaFxLib</name>
+  <description>Helpers methods For a JavaFx application.</description>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>http://www.opensource.org/licenses/MIT</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>  
+
   <!-- application, project and maven properties -->
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,13 +38,6 @@
     </dependency>-->
 
     <!-- dependencies for tests -->
-    <!--    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.16.12</version>
-      <scope>test</scope>
-    </dependency>-->
-
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -90,6 +94,12 @@
         <version>3.8.2</version> <!-- ok nouveau 24.10.2018 -->
       </plugin>
 
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+
       <plugin>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <version>3.0.0</version> <!-- avant 24.10.2018 version 2.9-->
@@ -98,11 +108,6 @@
         </configuration>
       </plugin>      
       
-    </plugins>
-  </build>
-
-  <reporting>
-    <plugins>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.1.1</version> 
@@ -110,17 +115,6 @@
     </plugins>
   </reporting>
   
-  <!-- more project information -->
-  <name>JavaFxLib</name>
-  <description>Helpers methods For a JavaFx application.</description>
-  <licenses>
-    <license>
-      <name>MIT License</name>
-      <url>http://www.opensource.org/licenses/MIT</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>  
-
   <url>https://github.com/emfinfo/javafxlib</url>
   <developers>
     <developer>
