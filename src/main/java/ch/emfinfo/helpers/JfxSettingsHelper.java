@@ -27,7 +27,7 @@ import javafx.geometry.Rectangle2D;
  * @author Jean-Claude Stritt
  * @version 1.0
  */
-public class SettingsHelper {
+public class JfxSettingsHelper {
   private static Preferences prefs = Preferences.userRoot().node("JavaFX");
 
 
@@ -48,7 +48,7 @@ public class SettingsHelper {
    * @param userNodeName le nom identifiant le noeud pour l'utilisateur courant
    */
   public static void setUserNodeName(String userNodeName) {
-    SettingsHelper.prefs = Preferences.userRoot().node(userNodeName);
+    JfxSettingsHelper.prefs = Preferences.userRoot().node(userNodeName);
   }
 
 

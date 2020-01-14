@@ -65,9 +65,9 @@ public class JfxMainScene extends Scene {
     this.loader = loader;
 
     // remplit un tableau avec les images trouvées dans le dossier prévu à cet effet
-    String bgImagePath = SettingsHelper.getValue("BG_IMAGE_PATH");
+    String bgImagePath = JfxSettingsHelper.getValue("BG_IMAGE_PATH");
     Path dir = Paths.get(bgImagePath);
-    try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "*.{jpg,jpeg,png}")) {
+    try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "*.{jpg,jpeg,png,JPG,JPEG,PNG}")) {
       for (Path entry : stream) {
         bgImages.add(entry.toFile());
       }
@@ -75,7 +75,7 @@ public class JfxMainScene extends Scene {
     }
 
     // charge une image de fond d'après l'index mémorisé dans les préférences
-    Image bgImage = loadIndexedImage(SettingsHelper.getInt("BG_IMAGE_IDX", 0));
+    Image bgImage = loadIndexedImage(JfxSettingsHelper.getInt("BG_IMAGE_IDX", 0));
 
     // initialise la vue
     init(bgImage);
@@ -113,7 +113,7 @@ public class JfxMainScene extends Scene {
     if (bgImageIdx > (bgImages.size()-1)) {
       bgImageIdx = 0;
     }
-    SettingsHelper.setInt("BG_IMAGE_IDX", bgImageIdx);
+    JfxSettingsHelper.setInt("BG_IMAGE_IDX", bgImageIdx);
 
     // s'il y a des images, prend celle qui est pointée par bgImageIdx
     if (bgImages.size() > 0) {
@@ -162,7 +162,7 @@ public class JfxMainScene extends Scene {
         public void handle(MouseEvent event) {
           int nb = event.getClickCount();
           if (nb == 2) {
-            loadIndexedImage(SettingsHelper.getInt("BG_IMAGE_IDX", 0) + 1);
+            loadIndexedImage(JfxSettingsHelper.getInt("BG_IMAGE_IDX", 0) + 1);
           }
           event.consume();
         }
