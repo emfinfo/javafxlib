@@ -1,4 +1,4 @@
-package ch.jcsinfo.models;
+package ch.jcsinfo.javafx.models;
 
 import java.net.URL;
 import javafx.scene.Node;

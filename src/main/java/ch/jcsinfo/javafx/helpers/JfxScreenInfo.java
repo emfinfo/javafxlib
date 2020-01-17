@@ -1,4 +1,4 @@
-package ch.jcsinfo.helpers;
+package ch.jcsinfo.javafx.helpers;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Rectangle2D;

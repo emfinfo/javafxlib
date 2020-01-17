@@ -1,6 +1,6 @@
 package ch.jcsinfo.helpers;
 
-import ch.jcsinfo.helpers.JfxSettingsHelper;
+import ch.jcsinfo.javafx.helpers.JfxSettingsHelper;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.FixMethodOrder;

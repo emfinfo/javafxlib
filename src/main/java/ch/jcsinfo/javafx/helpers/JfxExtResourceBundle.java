@@ -1,4 +1,4 @@
-package ch.jcsinfo.helpers;
+package ch.jcsinfo.javafx.helpers;
 
 import java.util.Properties;
 import java.util.ResourceBundle;
