@@ -1,4 +1,4 @@
-package ch.emfinfo.helpers;
+package ch.jcsinfo.helpers;
 
 /**
  * Création d'un type énumération qui permet de retrouver facilement

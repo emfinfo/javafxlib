@@ -1,4 +1,4 @@
-package ch.emfinfo.helpers;
+package ch.jcsinfo.helpers;
 
 import java.util.ResourceBundle;
 import javafx.beans.binding.StringBinding;
