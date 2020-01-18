@@ -1,4 +1,4 @@
-package ch.jcsinfo.helpers;
+package ch.jcsinfo.javafx.helpers;
 
 import ch.jcsinfo.javafx.helpers.JfxSettingsHelper;
 import static org.junit.Assert.assertEquals;
