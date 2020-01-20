@@ -65,7 +65,7 @@ public class JfxPopupHelper {
    * @return un panneau de type FlowPane
    */
   public FlowPane buildOneLabelPane(String text) {
-    Label label = new Label(rightPadding(text) + "\t");
+    Label label = new Label(text);
     label.pseudoClassStateChanged(PseudoClass.getPseudoClass("description"), true);
     return new ExtFlowPane(label);
   }
