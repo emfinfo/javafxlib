@@ -47,7 +47,7 @@ public class JfxPopup {
     // ajuste la taille préférée et ajoute des classes de styles CSS
     Pane pane = dlg.getDialogPane();
     pane.setMinHeight(Region.USE_PREF_SIZE);
-    URL url = pane.getClass().getClassLoader().getResource(RES_PATH);
+    URL url = JfxPopup.class.getClassLoader().getResource(RES_PATH);
     if (url != null) {
       pane.getStylesheets().add(url.toExternalForm());
       pane.getStyleClass().add("dialog-pane");
