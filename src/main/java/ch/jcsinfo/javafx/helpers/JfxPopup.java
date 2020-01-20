@@ -8,44 +8,51 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 
 /**
  * Affichage de popups.
  *
- * @author P.-A. Mettraux / J.-C. Stritt
+ * @author jcstritt
  */
 public class JfxPopup {
 
-
   /**
    * Méthode privée. Prépare une boite de dialogue pour l'affichage.
-   * Utilise éventuellement du CSS dans "/resources/css/MyDialogs.css" pour personnaliser la chose.
+   * Utilise du CSS dans "/resources/css/MyDialogs.css" pour personnaliser la chose.
    *
-   * @param dlg une boite de dialogue préalablement créée
    * @param owner la fenêtre propriétaire de la popup (pour centrage) ou null
+   * @param dlg une boite de dialogue préalablement créée
    * @param title un titre pour la popup
    * @param header un entête (si null = pas d'entête)
-   * @param msg normalement le message principal
+   * @param content normalement un message ou un autre panneau
    */
-  private static void preparePopup(Dialog<?> dlg, Window owner, String title, String header, String msg) {
-    String RES_PATH = "/resources/css/MyDialogs.css";
+  private static void decorate(Window owner, Dialog<?> dlg, String title, String header, Object content) {
+    String RES_PATH = "resources/css/MyDialogs.css";
     dlg.initOwner(owner);
     dlg.setTitle("- " + title);
     dlg.setHeaderText(header);
-    dlg.setContentText(msg);
-//    URL url = dlg.getClass().getClassLoader().getResource(RES_PATH);
-    URL url = JfxPopup.class.getResource(RES_PATH);
-    if (url != null) {
-      DialogPane pane = dlg.getDialogPane();
-      pane.getStylesheets().add(url.toExternalForm());
-      pane.getStyleClass().add("myDialog");
+    
+    // teste si c'est un simple texte à afficher ou un contenu plus consistent
+    if (content instanceof Pane) {
+      dlg.getDialogPane().setContent((Pane)content);
+    } else {
+      dlg.setContentText((String)content);
     }
-    dlg.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-  }
+    
+    // ajuste la taille préférée et ajoute des classes de styles CSS
+    Pane pane = dlg.getDialogPane();
+    pane.setMinHeight(Region.USE_PREF_SIZE);
+    URL url = pane.getClass().getClassLoader().getResource(RES_PATH);
+    if (url != null) {
+      pane.getStylesheets().add(url.toExternalForm());
+      pane.getStyleClass().add("dialog-pane");
+    }    
+  }  
 
   /**
    * Affiche une popup de type "error" centrée sur son propriétaire.
@@ -57,7 +64,7 @@ public class JfxPopup {
    */
   public static void displayError(Window owner, String title, String header, String msg) {
     Alert alert = new Alert(AlertType.ERROR);
-    preparePopup(alert, owner, title, header, msg);
+    decorate(owner, alert, title, header, msg);
     alert.showAndWait();
   }
 
@@ -84,9 +91,15 @@ public class JfxPopup {
    */
   public static void displayInformation(Window owner, String title, String header, String msg) {
     Alert alert = new Alert(AlertType.INFORMATION);
-    preparePopup(alert, owner, title, header, msg);
+    decorate(owner, alert, title, header, msg);
     alert.showAndWait();
   }
+  
+  public static void displayInformation(Window owner, String title, String header, VBox vbox) {
+    Alert alert = new Alert(AlertType.INFORMATION);
+    decorate(owner, alert, title, header, vbox);
+    alert.showAndWait();
+  }  
 
   /**
    * Affiche une popup de type "information" centrée sur l'écran.
@@ -100,7 +113,7 @@ public class JfxPopup {
   }
 
 
-
+  
   /**
    * Affiche une popup de type "avertissement" centrée sur son propriétaire.
    *
@@ -111,7 +124,7 @@ public class JfxPopup {
    */
   public static void displayWarning(Window owner, String title, String header, String msg) {
     Alert alert = new Alert(AlertType.WARNING);
-    preparePopup(alert, owner, title, header, msg);
+    decorate(owner, alert, title, header, msg);
     alert.showAndWait();
   }
 
@@ -141,7 +154,7 @@ public class JfxPopup {
    */
   public static boolean askConfirmation(Window owner, String title, String header, String msg) {
     Alert alert = new Alert(AlertType.CONFIRMATION);
-    preparePopup(alert, owner, title, header, msg);
+    decorate(owner, alert, title, header, msg);
     Optional<ButtonType> rep = alert.showAndWait();
     return rep.get() == ButtonType.OK;
   }
@@ -176,7 +189,7 @@ public class JfxPopup {
    */
   public static boolean askYesNo(Window owner, String title, String header, String msg, boolean defaultNo) {
     Alert alert = new Alert(AlertType.CONFIRMATION);
-    preparePopup(alert, owner, title, header, msg);
+    decorate(owner, alert, title, header, msg);
 
     // messages dans les boutons suivant la "Locale" par défaut
     String msgYes = "Yes";
@@ -246,7 +259,7 @@ public class JfxPopup {
    */
   public static String askInfo(Window owner, String title, String header, String msg) {
     TextInputDialog textInputDialog = new TextInputDialog();
-    preparePopup(textInputDialog, owner, title, header, msg);
+    decorate(owner, textInputDialog, title, header, msg);
     Optional<String> text = textInputDialog.showAndWait();
     return text.isPresent() ? text.get() : null;
   }

@@ -10,10 +10,10 @@ import javafx.scene.layout.FlowPane;
  * 
  * @author jcstritt
  */
-public class ExtendedFlowPane extends FlowPane {
+public class ExtFlowPane extends FlowPane {
   final static String RES_PATH = "resources/css/MyDialogs.css";
 
-  public ExtendedFlowPane(Node... nodes) {
+  public ExtFlowPane(Node... nodes) {
     super(nodes);
     URL url = this.getClass().getClassLoader().getResource(RES_PATH);
     if (url != null) {

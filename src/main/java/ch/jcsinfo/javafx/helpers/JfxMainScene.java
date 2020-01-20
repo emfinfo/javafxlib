@@ -65,20 +65,19 @@ public class JfxMainScene extends Scene {
     this.loader = loader;
 
     // remplit un tableau avec les images trouvées dans le dossier prévu à cet effet
-    String bgImagePath = JfxSettingsHelper.getValue("BG_IMAGE_PATH");
+    String bgImagePath = JfxSettings.getValue("BG_IMAGE_PATH");
     Path dir = Paths.get(bgImagePath);
+    Image bgImage;
     try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "*.{jpg,jpeg,png,JPG,JPEG,PNG}")) {
       for (Path entry : stream) {
         bgImages.add(entry.toFile());
       }
-    } catch (IOException x) {
+      bgImage = loadIndexedImage(JfxSettings.getInt("BG_IMAGE_IDX"));
+      init(bgImage, true);
+    } catch (IOException ex) {
+      bgImage = loadIndexedImage(0);
+      init(bgImage, false);
     }
-
-    // charge une image de fond d'après l'index mémorisé dans les préférences
-    Image bgImage = loadIndexedImage(JfxSettingsHelper.getInt("BG_IMAGE_IDX", 0));
-
-    // initialise la vue
-    init(bgImage);
   }
 
   /**
@@ -113,7 +112,7 @@ public class JfxMainScene extends Scene {
     if (bgImageIdx > (bgImages.size()-1)) {
       bgImageIdx = 0;
     }
-    JfxSettingsHelper.setInt("BG_IMAGE_IDX", bgImageIdx);
+    JfxSettings.setInt("BG_IMAGE_IDX", bgImageIdx);
 
     // s'il y a des images, prend celle qui est pointée par bgImageIdx
     if (bgImages.size() > 0) {
@@ -123,7 +122,7 @@ public class JfxMainScene extends Scene {
 
     // en cas de problème, charge une image de fond par défaut depuis les resources
     if (bgImage == null || bgImage.getWidth() == 0) {
-      String resourceBgImageUrl = loader.getExtResourceBundle().getTextProperty("app.background");
+      String resourceBgImageUrl = JfxSettings.getValue("BG_IMAGE_RESOURCE");
       bgImage = loadImage(resourceBgImageUrl);
     }
 
@@ -141,7 +140,6 @@ public class JfxMainScene extends Scene {
       // stage.setWidth(stage.getHeight() * imageRatio);
 
     }
-
     return bgImage;
   }
 
@@ -150,27 +148,27 @@ public class JfxMainScene extends Scene {
    *
    * @param bgImage un objet Image pour l'image de fond
    */
-  private void init(Image bgImage) {
+  private void init(Image bgImage,boolean addListener) {
 
     // si l'image a été chargée
-    if (bgImage != null) {
+    if (bgImage != null && addListener) {
 
       // ajout d'un écouteur sur les double-clics pour changer d'image
       this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
+        // gère le double-clic
         @Override
         public void handle(MouseEvent event) {
           int nb = event.getClickCount();
           if (nb == 2) {
-            loadIndexedImage(JfxSettingsHelper.getInt("BG_IMAGE_IDX", 0) + 1);
+            loadIndexedImage(JfxSettings.getInt("BG_IMAGE_IDX") + 1);
           }
           event.consume();
         }
       });
-
     }
 
-    // ajoute un écouteur sur le redimensionnement de la largeur ou de la hauteur de scène
+    // ajoute un écouteur sur le redimensionnement de la scène
     MyNumberChangeListener widthListener = new MyNumberChangeListener(0);
     MyNumberChangeListener heightListener = new MyNumberChangeListener(1);
     this.widthProperty().addListener(widthListener);
@@ -199,7 +197,6 @@ public class JfxMainScene extends Scene {
         i++;
       }
     }
-
   }
 
   /**
@@ -207,28 +204,43 @@ public class JfxMainScene extends Scene {
    *
    * @param rb un objet JfxExtResourceBundle
    */
-  public void setExtResourceBundle(JfxExtResourceBundle rb) {
-    loader.setExtResourceBundle(rb);
-  }
+//  public void setExtResourceBundle(JfxExtResourceBundle rb) {
+//    loader.setExtResourceBundle(rb);
+//  }
+  
+  
+  
+  /**
+   * Méthode privée pour corriger les labels d'après la largeur originelle de la fenêtre
+   */
+  private void correctLabelFont() {
+    double r = stage.getWidth() / origWidth;
+    for (int i = 0; i < labels.length; i++) {
+      Font f = labels[i].getFont();
+      int newSize = (int) (labelSizes[i] * r);
+      labels[i].setFont(new Font(f.getName(), newSize));
+    }
+  }  
 
   /**
-   * Méthode privée pour afficher un message de label dans une des 9 positions possibles.
+   * Méthode privée pour afficher un message de label dans l'une 
+   * des 9 positions possibles.
    *
-   * @param text      le texte à afficher
-   * @param position  la position où afficher le texte
-   * @param textFont  la police pour l'affichage
-   * @param textColor la couleur pour l'affichage
+   * @param lblText  le texte à afficher
+   * @param lblPos   la position où afficher le texte
+   * @param lblFont  la police pour l'affichage
+   * @param lblColor la couleur pour l'affichage
    */
-  private void setLabel(String text, JfxLabelPosEnum position, Font textFont, Color textColor) {
-    int i = position.getValue();
-    labels[i].setText(text);
-    labels[i].setFont(textFont);
-    labels[i].setTextFill(textColor);
+  private void setLabel(String lblText, JfxLabelPosEnum lblPos, Font lblFont, Color lblColor) {
+    int i = lblPos.getIdx();
+    labels[i].setText(lblText);
+    labels[i].setFont(lblFont);
+    labels[i].setTextFill(lblColor);
     labels[i].getStyleClass().remove("label");
     labelSizes[i] = (int) labels[i].getFont().getSize();
 
     // alignement par défaut pour les colonnes
-    switch (position.getCol()) {
+    switch (lblPos.getCol()) {
       case 1:
         GridPane.setHalignment(labels[i], HPos.CENTER);
         break;
@@ -240,7 +252,7 @@ public class JfxMainScene extends Scene {
     }
 
     // alignement par défaut pour les lignes
-    switch (position.getRow()) {
+    switch (lblPos.getRow()) {
       case 1:
         GridPane.setValignment(labels[i], VPos.CENTER);
         break;
@@ -250,53 +262,27 @@ public class JfxMainScene extends Scene {
       default:
         GridPane.setValignment(labels[i], VPos.TOP);
     }
-
   }
 
   /**
-   * Permet d'afficher un message déjà connu en utilisant les autres paramètres définis
-   * pour ce message.
-   *
-   * @param text        le texte à afficher
-   * @param key         la clé qui identifie les propriétés de ce texte à afficher
-   * @param correctSize indique s'il faut corriger la hauteur du message
+   * Ajuste un message de label dans l'une des 9 positions prévues. Le message 
+   * doit être identifié par son index dans la clé "BG_MSGx_TEXT" (x=1,2 ou 3).
+   * 
+   * @param idx l'index du message à récupérer (1 à 3 normalement)
+   * @param text le texte à afficher 
+   * @param options éventuellement un boolean TRUE pour recorriger la taille du label
    */
-  public void setLabel(String text, String key, boolean correctSize) {
-    JfxExtResourceBundle rb = loader.getExtResourceBundle();
-    Color color = rb.getColorProperty(key + ".color");
-    Font font = rb.getFontProperty(key + ".font");
-    JfxLabelPosEnum positiom = rb.getLabelPosProperty(key + ".position");
-    setLabel(text, positiom, font, color);
-    if (correctSize) {
+  public void setLabel(int idx, String text, boolean... options) {
+    JfxLabelPosEnum position = JfxSettings.getPosition(idx);
+    Font font = JfxSettings.getFont(idx);
+    Color color = JfxSettings.getColor(idx);
+    setLabel(text, position, font, color);
+    if ((options.length > 0) && (options[0] == true)) {
       correctLabelFont();
     }
   }
-
-  /**
-   * Permet d'afficher un message identifié par une clé dans une des 9 positions possibles.
-   *
-   * @param key         la clé qui identifie le message à afficher depuis le fichier de resources
-   * @param correctSize indique s'il faut corriger la hauteur du message
-   */
-  public void setLabel(String key, boolean correctSize) {
-    JfxExtResourceBundle rb = loader.getExtResourceBundle();
-    String msg = rb.getTextProperty(key + ".text");
-    setLabel(msg, key, correctSize);
-  }
-
-  /**
-   * Méthode privée pour corriger les labels d'après la largeur originelle de la fenêtre
-   */
-  private void correctLabelFont() {
-    double r = stage.getWidth() / origWidth;
-    for (int i = 0; i < labels.length; i++) {
-      Font f = labels[i].getFont();
-      int newSize = (int) (labelSizes[i] * r);
-      labels[i].setFont(new Font(f.getName(), newSize));
-    }
-  }
-
-
+  
+  
 
   /**
    * Classe pour écouter les changements sur une propriété de type Number.

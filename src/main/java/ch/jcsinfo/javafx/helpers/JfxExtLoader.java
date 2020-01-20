@@ -207,8 +207,8 @@ public class JfxExtLoader<T> {
       childStage.setScene(newScene);
 
       // appliquer les dimensions minimales
-      childStage.setMinWidth(JfxSettingsHelper.getDouble(uViewName+"_MIN_WIDTH"));
-      childStage.setMinHeight(JfxSettingsHelper.getDouble(uViewName+"_MIN_HEIGHT"));
+      childStage.setMinWidth(JfxSettings.getDouble(uViewName+"_MIN_WIDTH"));
+      childStage.setMinHeight(JfxSettings.getDouble(uViewName+"_MIN_HEIGHT"));
 
       // choisir un titre pour la fenêtre
       childStage.setTitle("- " + extRB.getTextProperty("title"));
@@ -222,7 +222,7 @@ public class JfxExtLoader<T> {
 
       // repositionne et redimentionne la fenêtre si les données ont été mémorisées
       Rectangle2D mainRect = new Rectangle2D(owner.getX(), owner.getY(), owner.getWidth(), owner.getHeight());
-      Rectangle2D childRect = JfxSettingsHelper.getRectangle(uViewName);
+      Rectangle2D childRect = JfxSettings.getRectangle(uViewName);
       if (childRect.getWidth() > 0d && childRect.getHeight() > 0d) {
         if (center) {
           childStage.setX(mainRect.getMinX() + mainRect.getWidth() / 2 - childRect.getWidth() / 2);

@@ -1,6 +1,6 @@
 package ch.jcsinfo.javafx.helpers;
 
-import ch.jcsinfo.javafx.helpers.JfxSettingsHelper;
+import ch.jcsinfo.javafx.helpers.JfxSettings;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.FixMethodOrder;
@@ -19,8 +19,8 @@ public class SettingsHelperTest {
   public void test01_setUserNodeName() {
     System.out.println("setUserNodename");
     String userNodeName = "JAVAFX-TEST";
-    JfxSettingsHelper.setUserNodeName(userNodeName);
-    String name = JfxSettingsHelper.getUserNodeName();
+    JfxSettings.setUserNodeName(userNodeName);
+    String name = JfxSettings.getUserNodeName();
     assertTrue(name.equals(userNodeName));
   }
 
@@ -29,8 +29,8 @@ public class SettingsHelperTest {
     System.out.println("setValue");
     Object pref = "STRING_VALUE";
     String expResult = "Hello";
-    JfxSettingsHelper.setValue(pref, expResult);
-    String result = JfxSettingsHelper.getValue(pref);
+    JfxSettings.setValue(pref, expResult);
+    String result = JfxSettings.getValue(pref);
     assertEquals(expResult, result);
   }
 
@@ -39,8 +39,8 @@ public class SettingsHelperTest {
     System.out.println("setBoolean");
     Object pref = "BOOLEAN_VALUE";
     boolean expResult = true;
-    JfxSettingsHelper.setBoolean(pref, expResult);
-    boolean result = JfxSettingsHelper.getBoolean(pref);
+    JfxSettings.setBoolean(pref, expResult);
+    boolean result = JfxSettings.getBoolean(pref);
     assertEquals(expResult, result);
   }
 
@@ -49,8 +49,8 @@ public class SettingsHelperTest {
     System.out.println("setInt");
     Object pref = "INT_VALUE";
     int expResult = -10;
-    JfxSettingsHelper.setInt(pref, expResult);
-    int result = JfxSettingsHelper.getInt(pref);
+    JfxSettings.setInt(pref, expResult);
+    int result = JfxSettings.getInt(pref);
     assertEquals(expResult, result);
   }
 
@@ -59,8 +59,8 @@ public class SettingsHelperTest {
     System.out.println("setLong");
     Object pref = "LONG_VALUE";
     long expResult = 20L;
-    JfxSettingsHelper.setLong(pref, expResult);
-    long result = JfxSettingsHelper.getLong(pref);
+    JfxSettings.setLong(pref, expResult);
+    long result = JfxSettings.getLong(pref);
     assertEquals(expResult, result);
   }
 
@@ -70,8 +70,8 @@ public class SettingsHelperTest {
     Object pref = "FLOAT_VALUE";
     float value = 0.7140f;
     float expResult = 0.7140f;
-    JfxSettingsHelper.setFloat(pref, value, 4);
-    float result = JfxSettingsHelper.getFloat(pref);
+    JfxSettings.setFloat(pref, value, 4);
+    float result = JfxSettings.getFloat(pref);
     assertEquals(expResult, result, 0.0);
   }
 
@@ -81,8 +81,8 @@ public class SettingsHelperTest {
     Object pref = "DOUBLE_VALUE";
     double value = Math.PI;
     double expResult = 3.1416d;
-    JfxSettingsHelper.setDouble(pref, value, 4);
-    double result = JfxSettingsHelper.getDouble(pref);
+    JfxSettings.setDouble(pref, value, 4);
+    double result = JfxSettings.getDouble(pref);
     assertEquals(expResult, result, 0.0);
   }
 
@@ -91,8 +91,8 @@ public class SettingsHelperTest {
     System.out.println("setObject");
     Object pref = "OBJECT_VALUE";
     Classe expResult = new Classe("1i1", "Informatique");
-    JfxSettingsHelper.setObject(pref, expResult);
-    Classe result = (Classe) JfxSettingsHelper.getObject(pref);
+    JfxSettings.setObject(pref, expResult);
+    Classe result = (Classe) JfxSettings.getObject(pref);
     assertEquals(expResult.toString(), result.toString());
   }
 
