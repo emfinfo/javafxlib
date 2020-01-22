@@ -9,9 +9,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 /**
@@ -51,6 +53,13 @@ public class JfxPopup {
     if (url != null) {
       pane.getStylesheets().add(url.toExternalForm());
       pane.getStyleClass().add("dialog-pane");
+    }    
+    
+    // ajoute un logo à gauche du titre
+    String iconPath = JfxSettings.getValue("LOGO");
+    if (!iconPath.isEmpty()) {
+      Stage stage = (Stage)pane.getScene().getWindow();
+      stage.getIcons().add(new Image(iconPath));  
     }    
   }  
 

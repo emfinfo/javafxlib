@@ -1,6 +1,7 @@
 package ch.jcsinfo.javafx.helpers;
 
 import ch.jcsinfo.javafx.models.ExtFlowPane;
+import java.util.Arrays;
 import javafx.application.HostServices;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
@@ -9,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
@@ -52,7 +54,9 @@ public class JfxPopupHelper {
   }
 
   private String rightPadding(String str) {
-    return String.format("%1$-" + labelWidth + "s", str);
+    char[] array = new char[labelWidth];
+    Arrays.fill(array, ' '); // blanc insécable
+    return (str + (new String(array))).substring(0, labelWidth); 
   }
   
 
@@ -79,7 +83,7 @@ public class JfxPopupHelper {
    * @return un panneau de type FlowPane
    */
   public FlowPane buildTwoLabelsPane(String txtLabel, String txtInfo) {
-    Label label1 = new Label(rightPadding(txtLabel + ":") + "\t");
+    Label label1 = new Label(rightPadding(txtLabel + ":"));
     label1.pseudoClassStateChanged(PseudoClass.getPseudoClass("highlighting"), true);
     Label label2 = new Label(txtInfo);
     return new ExtFlowPane(label1, label2);    
@@ -94,7 +98,7 @@ public class JfxPopupHelper {
    * @return un panneau de type FlowPane
    */
   public FlowPane buildLabelAndLinkPane(String txtLabel, String txtURL) {
-    Label label = new Label(rightPadding(txtLabel + ":") + "\t");
+    Label label = new Label(rightPadding(txtLabel + ":"));
     label.pseudoClassStateChanged(PseudoClass.getPseudoClass("highlighting"), true);
     Hyperlink link = createHyperlink(txtURL);
     return new ExtFlowPane(label, link);    
@@ -104,13 +108,13 @@ public class JfxPopupHelper {
    * Crée un panneau horizontal bidon juste pour
    * faire de l'espace entre 2 panneaux.
    * 
-   * @param pxBefore le nb de px à afficher avant
-   * @param pxAfter le nombre de pixels à afficher après
+   * @param height hauteur de l'espace en [px]
    * @return un panneau de type FlowPane
    */
-  public FlowPane buildBlankPane(int pxBefore, int pxAfter) {
-    Label label = new Label("");
-    label.setPadding(new Insets(pxBefore, 0, pxAfter, 0));
+  public FlowPane buildBlankPane(int height) {
+    Label label = new Label();
+    label.setFont(new Font(0));
+    label.setPadding(new Insets(0, 0, height, 0));
     return new FlowPane(label);    
   }
 

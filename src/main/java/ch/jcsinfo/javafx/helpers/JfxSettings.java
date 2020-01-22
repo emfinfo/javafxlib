@@ -29,7 +29,7 @@ import javafx.scene.text.Font;
  * @author jcstritt
  */
 public class JfxSettings {
-  private static Preferences prefs = Preferences.userRoot().node("JavaFX");
+  private static Preferences prefs = Preferences.userRoot().node("prefs");
 
 /**
    * Prépare un string d'une certaine longueur avec un caractère spécifié.

@@ -1,7 +1,7 @@
 # JavaFxLib 8.0.1 - januar 2020
 A small JavaFX 8 library to start an application with internationalization and other goodies.
 
-New in release 8.0.1 (20.1.2020) :
+New in release 8.0.1 (22.1.2020) :
 * adapted to JavaFX8
 * SettingsHelper has been renamed JfxSettings
 * correct a bug in JfxMainScene constructor with background images
