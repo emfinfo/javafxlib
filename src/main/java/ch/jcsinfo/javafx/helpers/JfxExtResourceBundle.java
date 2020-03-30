@@ -87,7 +87,8 @@ public class JfxExtResourceBundle {
     String properties[] = new String[highIdx-lowIdx+1];
     int j = 0;
     for (int i = lowIdx; i <= highIdx; i++) {
-      properties[j] = getTextProperty(prefixKey + i);
+      String p = (highIdx >= 10 && i < 10) ? "0"+i : ""+i;      
+      properties[j] = getTextProperty(prefixKey + p);
       j++;
     }
     return properties;
