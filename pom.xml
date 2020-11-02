@@ -26,6 +26,15 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
+  
+  <!-- additional repository -->
+  <repositories>
+    <repository>
+      <id>emfinfo</id>
+      <name>emfinfo.github.io</name>
+      <url>http://emfinfo.github.io/javalibs/releases</url>
+    </repository>
+  </repositories>  
 
   <!-- dependencies -->
   <dependencies>
@@ -91,7 +100,7 @@
     
   </build>
 
-  <!-- reporting HTML with "mvn site" -->
+  <!-- HTML reporting with "mvn site" -->
   <!-- 
        WARNING, to create HTML javadoc with no error
        and no warning with the "mvn site" command, 
