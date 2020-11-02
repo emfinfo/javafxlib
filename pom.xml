@@ -31,12 +31,14 @@
   <dependencies>
     
     <!-- dependencies for compile (and run) -->
-    <!--    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>1.7.19</version>
-    </dependency>-->
-
+<!--    <dependency>
+      <groupId>javafx</groupId>
+      <artifactId>jfxrt</artifactId>
+      <version>${java.version}</version>
+      <scope>system</scope>
+      <systemPath>${java.home}/lib/ext/jfxrt.jar</systemPath>      
+    </dependency>      -->
+    
     <!-- dependencies for tests -->
     <dependency>
       <groupId>junit</groupId>
@@ -44,6 +46,7 @@
       <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
+    
   </dependencies>
 
   <!-- build settings -->
@@ -56,7 +59,7 @@
 
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.1.1</version>
+        <version>3.2.0</version>
       </plugin>
 
       <plugin>
@@ -88,34 +91,50 @@
         </configuration>
       </plugin>
       
-      <plugin>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.1.0</version>
-        <configuration>
-          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-        </configuration>
-      </plugin>         
       
+      <!-- ATTENTION, pour que maven-site-plugin fonctionne
+          avec "mvn site", il faut une version Java8
+          du JRE (avec Javafx, librairie jfxrt.jar). 
+          OpenJDK 8 ne fonctionnera pas, car il ne contient
+          pas la librairie JavaFX 
+      -->   
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>3.9.1</version> 
-      </plugin>
-
+      </plugin>    
+      
     </plugins>
+    
   </build>
 
   <!-- "mvn site" report -->
   <reporting>
     <plugins>
+      
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <source>1.8</source>
-        </configuration> 
+        <version>3.2.0</version>
+<!--        <configuration>
+          <additionalJOption>-Xdoclint:none</additionalJOption>
+          <doclint>none</doclint> 
+          <skip>true</skip>   
+        </configuration>        -->
       </plugin>
+            
+      <plugin>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+          <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+        </configuration>
+      </plugin>         
+       
     </plugins>
+      
   </reporting>
+  
   
   <url>https://github.com/emfinfo/javafxlib</url>
   <developers>
