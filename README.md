@@ -1,5 +1,8 @@
-# JavaFxLib 8.0.1 - januar 2020
+# JavaFxLib 8.0.2 - november 2020
 A small JavaFX 8 library to start an application with internationalization and other goodies.
+
+New in release 8.0.2 (02.11.2020) :
+* some dependencies have been updated
 
 New in release 8.0.1 (22.1.2020) :
 * adapted to JavaFX8
