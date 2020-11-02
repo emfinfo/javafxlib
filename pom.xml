@@ -6,6 +6,8 @@
   <name>JavaFxLib</name>
   <description>Helpers methods For a JavaFx application.</description>
   <url>https://github.com/emfinfo/javafxlib</url>
+  
+  <!-- project organization -->
   <organization>
     <name>JCSINFO</name>
     <url>https://www.jcsinfo.ch</url>
@@ -89,14 +91,13 @@
     
   </build>
 
-  <!-- reporting HTML avec "mvn site" -->
+  <!-- reporting HTML with "mvn site" -->
   <!-- 
-       ATTENTION, pour que la javadoc HTML soit créée
-       sans erreur ni warning avec "mvn site", il faut
-       une version Java8 du JRE (avec Javafx et sa 
-       librairie jfxrt.jar). 
-       OpenJDK 8 ne fonctionnera pas, car il ne
-       contient pas la librairie JavaFX. 
+       WARNING, to create HTML javadoc with no error
+       and no warning with the "mvn site" command, 
+       you must use a Java 8 JRE with library JavaFX 
+       included (jfxrt.jar). OpenJDK 8 doesn't work 
+       because it not includes this library.
   -->     
   <reporting>
     <plugins>
