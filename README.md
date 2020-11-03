@@ -16,4 +16,4 @@ New in release 1.0.1 (3.3.2018) :
 * First release
 
 Documentation :<br>
-    http://www.jcsinfo.ch/doc/javafxlib<br>
+    https://www.jcsinfo.ch/doc/javafxlib<br>
